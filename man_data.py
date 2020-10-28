@@ -11,6 +11,7 @@
 #########################################################   
 
 import shap
+import random
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,12 +19,13 @@ from sklearn.tree import plot_tree, DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import KFold
 from sklearn.metrics import classification_report, roc_auc_score
-from category_encoders import OrdinalEncoder
+from category_encoders import *
 
 
 class Manipulador_de_Dados():
     def __init__(self):
         self.data = pd.read_excel('dataset.xlsx')
+        self.random_state = 25
     def init_algo(self):
         self.filter_data()
         self.random_forest()
@@ -31,17 +33,15 @@ class Manipulador_de_Dados():
         self.data['SARS-Cov-2 exam result'] = self.data['SARS-Cov-2 exam result'].map(dict(negative=0, positive=1))
         self.data['Urine - pH'] = self.data['Urine - pH'].map(lambda x: -100 if isinstance(x, str) else x).astype(float)
         self.data['Urine - Leukocytes'] = self.data['Urine - Leukocytes'].map(lambda x: 500 if x == '<1000' else x).astype(float)
-        self.exams = self.data.drop('Patient ID', 
+        self.exams = self.data.drop(['Patient ID', 
                                'Patient age quantile', 
                                'SARS-Cov-2 exam result', 
                                'Patient addmited to regular ward (1=yes, 0=no)', 
                                'Patient addmited to semi-intensive unit (1=yes, 0=no)', 
-                               'Patient addmited to intensive care unit (1=yes, 0=no)')
+                               'Patient addmited to intensive care unit (1=yes, 0=no)'], axis = 1)
         self.exams['Patient age quantile'] = self.data['Patient age quantile']
-    def random_forest(self):        
-        kf = KFold(2, shuffle=True, random_state=0)
-    
-        for tr, ts in kf.split(self.exams):
+    def random_forest(self):
+        for tr, ts in KFold(n_splits=4, shuffle=True, random_state=self.random_state).split(self.exams):
             exams_training = self.exams.iloc[tr]
             exams_test_set = self.exams.iloc[ts]
             y_training = self.data.iloc[tr]['SARS-Cov-2 exam result']
@@ -49,7 +49,7 @@ class Manipulador_de_Dados():
             
             exams_training, exams_test_set = self.encode_fill_NaN(exams_training, exams_test_set)
 
-            rforest_model = RandomForestClassifier(random_state=0,
+            rforest_model = RandomForestClassifier(random_state=self.random_state,
                                         criterion='gini',
                                         n_estimators=500,
                                         bootstrap=True,
@@ -57,8 +57,8 @@ class Manipulador_de_Dados():
             rforest_model.fit(exams_training, y_training)
             
             p = rforest_model.predict_proba(exams_test_set)[:,1]
-            
-            print("AUC= ", roc_auc_score(y_test_set,p))
+            print('AUC= ', roc_auc_score(y_test_set,p))
+
     def encode_fill_NaN(self, training, test_set):
         enc = OrdinalEncoder()
         training = enc.fit_transform(training).fillna(-10)
