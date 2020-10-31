@@ -1,5 +1,5 @@
 #########################################################
-#   Trabalho 1 - Introdução à Inteligência Artificial   #
+#   Trabalho 3 - Introdução à Inteligência Artificial   #
 #                                                       #
 #   Integrantes:                                        #
 #   André Carvalho Marques - 15/0005491                 #
@@ -11,19 +11,8 @@
 #########################################################
 import os
 import shap
-import random
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.tree import plot_tree, DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import KFold
-from sklearn.metrics import classification_report, roc_auc_score
-from category_encoders import *
-
 import scikitplot as skplt
-import matplotlib.pyplot as plt
-
 
 script_dir = os.path.dirname(__file__)
 def create_roc(data):
