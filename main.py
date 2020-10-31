@@ -14,12 +14,23 @@
 import man_data
 import random
 import os
+import graphs
 
 #########################################################
 # Parte que faz a execução do algoritmo em si           #
 #########################################################
 main = man_data.Manipulador_de_Dados()
-main.init_algo()
+data_for_plot, data_for_shap = main.init_algo1()
+print('Task 1: Criando gráficos ...')
+graphs.create_shap(data_for_shap, 1)
+graphs.create_roc(data_for_plot)
+print('Task 1: Gráficos criados!')
+
+data_for_plot, data_for_shap = main.init_algo2()
+print('Task 2: Criando gráficos ...')
+graphs.create_shap(data_for_shap, 2)
+print('Task 2: Gráficos criados!')
+
 
 # print("\nA melhor rota encontrada pelo algoritmo, partindo de BSB e visitando todas as cidades é: ")
 # print(*rota, sep=' -> ')
