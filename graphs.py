@@ -15,11 +15,25 @@ import matplotlib.pyplot as plt
 import scikitplot as skplt
 
 script_dir = os.path.dirname(__file__)
+
+#########################################################
+# Cria a curva ROC, baseado na lista data, que contém   #
+# O resultado do test_set e a predição do y a partir da #
+# amostra do test_set.                                  #
+#########################################################
 def create_roc(data):
     skplt.metrics.plot_roc(data[0], data[1])
     plt.savefig(script_dir + '/task1/roc_curve.png')
     plt.close()   
-    
+
+
+#########################################################
+# Cria os graficos provenientes do shap, que são o      #
+# summary plot, que determina o grau de importância de  #
+# cada atributo na precição do resultado, e chama os    #
+# dependency plots, que analisam o valor shap           #
+# localmente para cada atributo(coluna).                #
+#########################################################
 def create_shap(data, task):
     plt.clf()
     explainer = shap.TreeExplainer(data[0])
@@ -44,7 +58,12 @@ def create_shap(data, task):
         create_dependence_plot(data, shap_values, task,'Patient age quantile')
         create_dependence_plot(data, shap_values, task,'Proteina C reativa mg/dL')
         create_dependence_plot(data, shap_values, task,'Neutrophils')
-    
+
+
+#########################################################
+# Cria os dependency plots para analisar como cada      #
+# coluna determina o valor shap.                        #
+#########################################################
 def create_dependence_plot(data, shap_values,task,name):
     plt.clf()
     
