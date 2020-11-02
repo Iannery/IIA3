@@ -30,7 +30,7 @@ graphs.create_roc(data_for_plot)
 print('Task 1: Gráficos criados!')
 
 # Utiliza o manipulador de dados para rodar a task 2
-data_for_plot, data_for_shap = main.init_algo2()
+data_for_shap = main.init_algo2()
 print('Task 2: Criando gráficos ...')
 # Cria o summary plot e os dependency plots do shap para task 2
 graphs.create_shap(data_for_shap, 2)
