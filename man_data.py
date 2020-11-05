@@ -10,16 +10,12 @@
 #                                                       #
 #########################################################   
 
-import shap
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import scikitplot as skplt
-from sklearn.tree import plot_tree, DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import KFold
-from sklearn.metrics import *
-from category_encoders import *
+from sklearn.metrics import accuracy_score
+from category_encoders import OrdinalEncoder
 
 
 
@@ -75,11 +71,12 @@ class Manipulador_de_Dados():
     #########################################################
     def filter_data1(self):
         self.data['SARS-Cov-2 exam result'] = self.data['SARS-Cov-2 exam result'].map(dict(negative = 0, positive = 1))
-        self.exams = self.data.drop(['Patient ID', 
-                               'SARS-Cov-2 exam result',
-                               'Patient addmited to regular ward (1=yes, 0=no)', 
-                               'Patient addmited to semi-intensive unit (1=yes, 0=no)', 
-                               'Patient addmited to intensive care unit (1=yes, 0=no)'], axis = 1)
+        self.exams = self.data.drop(['Patient ID',
+                                     'Patient age quantile',
+                                     'SARS-Cov-2 exam result',
+                                     'Patient addmited to regular ward (1=yes, 0=no)', 
+                                     'Patient addmited to semi-intensive unit (1=yes, 0=no)', 
+                                     'Patient addmited to intensive care unit (1=yes, 0=no)'], axis = 1)
     
     #########################################################
     # Filtra dos dados sensíveis para a task 2, que trata   #

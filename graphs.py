@@ -55,7 +55,7 @@ def create_shap(data, task):
                           max_display=5)
         plt.savefig(script_dir + '/task2/shap_graph.png', bbox_inches='tight')
         plt.close()
-        create_dependence_plot(data, shap_values, task,'Patient age quantile')
+        # create_dependence_plot(data, shap_values, task,'Patient age quantile')
         create_dependence_plot(data, shap_values, task,'Proteina C reativa mg/dL')
         create_dependence_plot(data, shap_values, task,'Neutrophils')
 
